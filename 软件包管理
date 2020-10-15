@@ -47,7 +47,7 @@ yum reinstall 包名 //重新安装软件
 yum search 包名的一部分 //查找软件包
 配置网上yum源
 
-1）	epel源
+1）epel源
 官方：
 wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 rpm -ivh epel-release-latest-7.noarch.rpm
@@ -60,7 +60,6 @@ wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-
 wget  -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.163.com/.help/CentOS7-Base-163.repo
 
 源码安装：也叫定制安装，也叫自定义安装，需要自己编译源代码的安装方式
-
 1、解压源代码包 .tar.gz
 2、配置 configure 指定安装路径，做一些其他配置
 3、编译 make
