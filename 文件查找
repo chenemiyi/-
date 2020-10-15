@@ -1,4 +1,18 @@
-find命令 
+which  查看可执行文件的位置 
+通过PATH环境变量 到该路径内查找可执行文件，所以基本的功能是寻找可执行文件  
+[root@localhost ~]# which passwd
+/usr/bin/passwd
+
+whereis   查看文件的位置 
+-b ： 只找二进制文件  
+-m： 只找在说明文件manual路径下的文件  
+-s ： 只找source源文件  
+-u ： 没有说明文档的文件  
+[root@localhost tmp]# whereis -b passwd
+passwd: /usr/bin/passwd /etc/passwd
+
+
+find  实际搜寻硬盘查询文件名称 
 如果不指定路径就表示当前路径  在查找的时候是递归查找 
 
 普通用户在查找文件的时候需要对目录有r-x的权限
