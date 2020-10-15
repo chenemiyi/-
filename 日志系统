@@ -74,6 +74,8 @@ rotate 1
         /bin/kill -USR1 `cat /run/nginx.pid 2>/dev/null` 2>/dev/null || true
     endscript   //结束指令
 }
-
+#crontab -e
+*/1 * * * *  /usr/sbin/logrotate /etc/logrotate.d/nginx >/dev/null 2>&1
+# systemctl restart crond.service
 
 https://www.linuxidc.com/Linux/2019-02/157099.htm
