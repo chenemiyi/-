@@ -1,0 +1,71 @@
+
+
+[root@client ~]# yum install -y httpd
+
+[root@client ~]# systemctl restart httpd
+
+[root@client ~]# cd /var/www/html
+
+[root@client html]# mkdir ceph
+
+[root@client html]#cd /var/cache/yum/x86_64/7/Ceph/packages/  rz导入rpm包
+
+[root@client packages]# cp  ./ *  /var/www/html/ceph
+
+[root@client ceph]# ls
+ceph-12.2.9-0.el7.x86_64.rpm`
+ceph-base-12.2.9-0.el7.x86_64.rpm`
+ceph-common-12.2.9-0.el7.x86_64.rpm`
+cephfs-java-12.2.9-0.el7.x86_64.rpm`
+ceph-fuse-12.2.9-0.el7.x86_64.rpm`
+ceph-mds-12.2.9-0.el7.x86_64.rpm`
+ceph-mgr-12.2.9-0.el7.x86_64.rpm`
+ceph-mon-12.2.9-0.el7.x86_64.rpm`
+ceph-osd-12.2.9-0.el7.x86_64.rpm`
+ceph-radosgw-12.2.9-0.el7.x86_64.rpm`
+ceph-resource-agents-12.2.9-0.el7.x86_64.rpm`
+ceph-selinux-12.2.9-0.el7.x86_64.rpm`
+ceph-test-12.2.9-0.el7.x86_64.rpm`
+libcephfs2-12.2.9-0.el7.x86_64.rpm`
+libcephfs-devel-12.2.9-0.el7.x86_64.rpm`
+libcephfs_jni1-12.2.9-0.el7.x86_64.rpm`
+librados2-12.2.9-0.el7.x86_64.rpm`
+librados-devel-12.2.9-0.el7.x86_64.rpm`
+libradosstriper1-12.2.9-0.el7.x86_64.rpm`
+libradosstriper-devel-12.2.9-0.el7.x86_64.rpm`
+librbd1-12.2.9-0.el7.x86_64.rpm`
+librbd-devel-12.2.9-0.el7.x86_64.rpm`
+librgw2-12.2.9-0.el7.x86_64.rpm`
+librgw-devel-12.2.9-0.el7.x86_64.rpm`
+python34-ceph-argparse-12.2.9-0.el7.x86_64.rpm`
+python34-cephfs-12.2.9-0.el7.x86_64.rpm`
+python34-rados-12.2.9-0.el7.x86_64.rpm`
+python34-rbd-12.2.9-0.el7.x86_64.rpm`
+python34-rgw-12.2.9-0.el7.x86_64.rpm`
+python36-ceph-argparse-12.2.12-0.el7.x86_64.rpm`
+python36-cephfs-12.2.12-0.el7.x86_64.rpm`
+python36-rados-12.2.12-0.el7.x86_64.rpm`
+python36-rbd-12.2.12-0.el7.x86_64.rpm`
+python36-rgw-12.2.12-0.el7.x86_64.rpm`
+python-ceph-compat-12.2.9-0.el7.x86_64.rpm`
+python-cephfs-12.2.9-0.el7.x86_64.rpm`
+python-rados-12.2.9-0.el7.x86_64.rpm`
+python-rbd-12.2.9-0.el7.x86_64.rpm`
+python-rgw-12.2.9-0.el7.x86_64.rpm`
+rados-objclass-devel-12.2.9-0.el7.x86_64.rpm`
+rbd-fuse-12.2.9-0.el7.x86_64.rpm`
+rbd-mirror-12.2.9-0.el7.x86_64.rpm`
+rbd-nbd-12.2.9-0.el7.x86_64.rpm`
+
+[root@client packages]# createrepo .
+
+
+[root@client ceph]# vim /etc/yum.repos.d/ceph.repo 
+
+[ceph]
+name=ceph
+baseurl=http://192.168.182.101/ceph
+enable=1   是否启用YUM源
+gpgcheck=0  是否检查GPG-KEY
+
+WEB访问
