@@ -1,0 +1,114 @@
+日志的用途：
+    1）解决系统方面错误
+    2）解决网络方面的问题
+    3）记录重要的历史事件
+    4）解决安全方面的问题   
+    
+日志的种类
+    1、系统自带的应用日志    /var/log/messages
+    2、文件系统日志             ext3/ext4/xfs            
+    3、应用程序自带日志       ssh、http等服务都有相应的日志
+    
+Linux系统日志默认存放位置   /var/log
+
+Linux常见日志文件
+     messages            最重要的系统日志，几乎所有的系统错误信息都会记录在此  ****
+     cron                    计划任务相关的日志
+     secure                 安全相关的日志(需要输入用户名密码的软件，比如ssh、su等)
+     maillog					与邮件服务器相关的消息日志
+     boot.log               记录系统启动信息
+     dmesg                 内核检测过程中产生的各种信息，硬件检测信息
+     lastlog                 所有账户最近一次登录系统的相关信息 lastlog
+     wtmp                  记录的是正确登录的人的信息，可以用last来查看
+     btmp                   登录失败日志lastb
+
+服务自己管理日志：
+    httpd     web服务相关日志  apache    //access_log  error_log 访问和错误日志信息
+    samba    samba服务日志
+    xferlog    vsftpd服务日志   
+# tail -0f /var/log/secure
+Aug  3 12:14:03 server150 su: pam_unix(su-l:auth): authentication failure; logname=root uid=500 euid=0 tty=pts/5 ruser=test rhost=  user=root
+
+Aug  3 12:14:03 ：事件发生的时间
+server150：记录主机名
+su:触发事件的应用程序
+pam_unix(su-l:auth): authentication failure; ：事件的说明
+日志配置
+1、日志服务的配置文件
+    # vim /etc/rsyslog.conf
+        #### MODULES ####   //模块相关
+        $ModLoad imuxsock         //启用本地日志支持 
+        $ModLoad imklog            //启用内核相关日志
+        $ModLoad immark           //对日志打标记
+        
+        # Provides UDP syslog reception        //使用UDP协议接收远端的日志
+        #$ModLoad imudp                           //加载udp模块
+        #$UDPServerRun 514                       //服务器监听在514端口
+            
+        #### GLOBAL DIRECTIVES ####     //全局配置部分
+        # Include all config files in /etc/rsyslog.d/
+        $IncludeConfig /etc/rsyslog.d/*.conf     //包含/etc/rsyslog.d/目录下所有以.conf结尾的配置文件
+             
+        *.info;mail.none;authpriv.none;cron.none       /var/log/messages
+        authpriv.*                                 /var/log/secure
+        mail.*                                    /var/log/maillog
+        cron.*                                    /var/log/cron                   
+        *.emerg                                                  
+        *uucp,news.crit                             /var/log/spooler                             
+        local7.*                                   /var/log/boot.log             
+        服务或者设备.日志的级别                  日志记录到哪个文件
+            
+       local0~local7：自定义的服务名  
+配置格式：
+1）服务名称
+            authpriv(auth)：用户授权相关的，认证等  ssh、login、su等
+            cron：和计划任务相关的服务
+            mail：和邮件相关的
+            news：新闻相关的  uucp
+            kern：和内核相关的
+            lpr：打印机相关的
+            syslog：和rsyslogd进程相关的
+            local0~local7：自定义服务名称
+2）日志的级别：级别越高、日志越少
+            （1）none：不记录日志
+            （2）debug：调试信息
+            （3）info：一般的通知信息
+            （4）notice：提醒信息，比info稍微重要点
+            （5）warning（warn）：警告信息，可能有问题
+            （6）error)：错误信息
+            （7）critical(crit)：比较严重的错误
+            （8）alert：警报信息，需要立即行动
+            （9）emerg(panic)：紧急(恐慌)，系统可能已经不可用了
+3）服务名称.日志等级的表示
+.  —— mail.warning  表示记录mail服务，warning及其以上级别的日志 
+.=  —— mail.=warning   表示记录mail服务warning级别日志
+.! —— mail.!warning 表示除了warning级别以外的，其他级别的所有日志都记录
+.none —— 表示不记录
+* —— 表示所有
+*.  —— 表示所有服务
+.* —— 表示所有日志级别
+*.* —— 所有服务的所有级别的日志
+日志轮转：日志的轮替、日志的轮转
+为什么要轮转？
+1）防止日志文件过大
+2）定期清除日志        
+日志轮转的配置文件
+
+# vim /etc/logrotate.conf
+weekly                          //轮转的周期，一周一轮转
+rotate 4                         //保留几个旧的日志文件，类似于备份
+create                            //旧日志轮转后是否创建新的空白日志
+dateext                           //使用日期作为旧日志的后缀
+include /etc/logrotate.d     //包含该路径下的所有配置文件
+/var/log/wtmp {               //针对特定的日志进行定制设置
+monthly                      //轮滚周期，一个月
+create 0664 root utmp   //创建新的日志文件  权限664 所有者root 所属组utmp
+minsize 1M                  //轮滚的最小大小是1M
+rotate 1                      
+}
+/var/log/btmp {
+missingok               //丢了也没关系
+monthly
+create 0600 root utmp
+rotate 1
+}
