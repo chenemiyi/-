@@ -1,0 +1,67 @@
+centos软件包分类：
+1.rpm包 安装简单,但可定制性差,一台服务器只能装一个软件
+2.二进制包 安装简单,解压即可使用,可定制性不如源码包,一台服务器可安装多个软件
+3.源码包 可定制性强,但是安装过程复杂,一台服务器可安装多个软件
+
+linux中,访问设备数据需要将设备挂载光盘
+安装软件:
+rpm -ivh 包全名
+-i,--install 安装软件包
+-h, --hash 软件包安装的时候列出哈希标记
+-v, --verbose 提供更多的详细信息输出
+-U 升级软件包
+--force 强制安装
+--test 测试软件能否安装,不真正安装
+
+卸载软件:
+rpm -e 包名
+# rpm -e zsh
+--nodeps 不验证依赖性
+
+查询已安装的软件(***):
+# rpm -qa //查询所有已安装的软件包
+# rpm -ql zsh //查询软件包安装了哪些文件
+# rpm -qc zsh //查询软件包安装了哪些配置文件
+# rpm -qi zsh //列出软件包的详细信息
+# rpm -qf /etc/zlogin //查询文件由哪个包安装的
+查询未安装的软件信息: 必须要接包全名
+
+yum管理: 基于rpm的软件包管理程序,能够自动解决软件依赖关系
+主配置文件: /etc/yum.conf
+子配置文件: /etc/yum.repos.d/*.repo
+1. 配置仓库
+挂载好光盘就配置好了一个本地软件仓库
+
+2.使用仓库
+用法: yum [选项] 命令
+yum repolist //列出所有仓库
+yum clean all //清除所有缓存
+yum install 包名 -y //自动安装,不交互
+yum groupinstall 组名 //安装软件包组,组名中有空格或中文需要引起来
+yum install 包全名 //安装非仓库中的包
+yum erase/remove 包名 //删除已安装的软件,会删除所有的依赖包
+yum list //列出所有的软件包,最后一列@开头的表示已安装的
+yum grouplist //列出软件包组
+yum provides 命令文件绝对路径 //查找命令文件是由哪个包安装的
+yum reinstall 包名 //重新安装软件
+yum search 包名的一部分 //查找软件包
+配置网上yum源
+
+1）	epel源
+官方：
+wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+rpm -ivh epel-release-latest-7.noarch.rpm
+epel阿里云源：
+wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+
+2）阿里源
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+3）163源
+wget  -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.163.com/.help/CentOS7-Base-163.repo
+
+源码安装：也叫定制安装，也叫自定义安装，需要自己编译源代码的安装方式
+
+1、解压源代码包 .tar.gz
+2、配置 configure 指定安装路径，做一些其他配置
+3、编译 make
+4、安装 make install
