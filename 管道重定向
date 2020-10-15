@@ -1,0 +1,25 @@
+重定向：进程输出和错误消息可以捕获为文件内容，发送到设备，或者丢弃
+
+文件描述符：
+0 标准输入（stdin）
+1 标准输出（stdout）
+2 标准错误 （stderr）
+
+输出重定向操作符：
+> file   重定向stdout到文件
+>> file  重定向stdout到文件,附加到当前文件之后
+2> file  重定向到stderr到文件
+2> /dev/null     将stderr错误消息重定向到/dev/null，从而丢弃
+&>file       将stdout和stderr合并到一个文件
+>>file  2>&1    合并stdout和stderr,并附加到当前文件后面
+
+find /etc –name passwd 2> /tmp/errors 将错误信息重定向到文件
+find /etc –name passwd > /tmp/output 2> /tmp/errors 将标准输出和错误输出保存到不同文件
+find /etc –name passwd > /tmp/output 2> /dev/null 忽略丢弃错误消息
+find /etc –name passwd >> /tmp/save-both 2>&1 将标准输出、错误输出附加到同一文件
+
+
+管道：前条命令的输出等于后条命令的输入
+
+查看指定程序的进程运行状态，并将输出重定向到文件中。
+ps aux | grep httpd > /tmp/ps.output
