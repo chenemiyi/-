@@ -8,14 +8,14 @@
 
 [root@client html]# mkdir ceph
 
-[root@client html]#cd /var/cache/yum/x86_64/7/Ceph/packages/  rz导入rpm包
+[root@client html]#cd /var/cache/yum/x86_64/7/Ceph/packages/  导入rpm包
 
 [root@client packages]# cp  ./ *  /var/www/html/ceph
 
 [root@client ceph]# ls
-ceph-12.2.9-0.el7.x86_64.rpm`
-ceph-base-12.2.9-0.el7.x86_64.rpm`
-ceph-common-12.2.9-0.el7.x86_64.rpm`
+ceph-12.2.9-0.el7.x86_64.rpm
+ceph-base-12.2.9-0.el7.x86_64.rpm
+ceph-common-12.2.9-0.el7.x86_64.rpm
 cephfs-java-12.2.9-0.el7.x86_64.rpm`
 ceph-fuse-12.2.9-0.el7.x86_64.rpm`
 ceph-mds-12.2.9-0.el7.x86_64.rpm`
