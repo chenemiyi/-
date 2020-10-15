@@ -33,71 +33,18 @@ Aug  3 12:14:03 ：事件发生的时间
 server150：记录主机名
 su:触发事件的应用程序
 pam_unix(su-l:auth): authentication failure; ：事件的说明
-日志配置
-1、日志服务的配置文件
-    # vim /etc/rsyslog.conf
-        #### MODULES ####   //模块相关
-        $ModLoad imuxsock         //启用本地日志支持 
-        $ModLoad imklog            //启用内核相关日志
-        $ModLoad immark           //对日志打标记
-        
-        # Provides UDP syslog reception        //使用UDP协议接收远端的日志
-        #$ModLoad imudp                           //加载udp模块
-        #$UDPServerRun 514                       //服务器监听在514端口
-            
-        #### GLOBAL DIRECTIVES ####     //全局配置部分
-        # Include all config files in /etc/rsyslog.d/
-        $IncludeConfig /etc/rsyslog.d/*.conf     //包含/etc/rsyslog.d/目录下所有以.conf结尾的配置文件
-             
-        *.info;mail.none;authpriv.none;cron.none       /var/log/messages
-        authpriv.*                                 /var/log/secure
-        mail.*                                    /var/log/maillog
-        cron.*                                    /var/log/cron                   
-        *.emerg                                                  
-        *uucp,news.crit                             /var/log/spooler                             
-        local7.*                                   /var/log/boot.log             
-        服务或者设备.日志的级别                  日志记录到哪个文件
-            
-       local0~local7：自定义的服务名  
-配置格式：
-1）服务名称
-            authpriv(auth)：用户授权相关的，认证等  ssh、login、su等
-            cron：和计划任务相关的服务
-            mail：和邮件相关的
-            news：新闻相关的  uucp
-            kern：和内核相关的
-            lpr：打印机相关的
-            syslog：和rsyslogd进程相关的
-            local0~local7：自定义服务名称
-2）日志的级别：级别越高、日志越少
-            （1）none：不记录日志
-            （2）debug：调试信息
-            （3）info：一般的通知信息
-            （4）notice：提醒信息，比info稍微重要点
-            （5）warning（warn）：警告信息，可能有问题
-            （6）error)：错误信息
-            （7）critical(crit)：比较严重的错误
-            （8）alert：警报信息，需要立即行动
-            （9）emerg(panic)：紧急(恐慌)，系统可能已经不可用了
-3）服务名称.日志等级的表示
-.  —— mail.warning  表示记录mail服务，warning及其以上级别的日志 
-.=  —— mail.=warning   表示记录mail服务warning级别日志
-.! —— mail.!warning 表示除了warning级别以外的，其他级别的所有日志都记录
-.none —— 表示不记录
-* —— 表示所有
-*.  —— 表示所有服务
-.* —— 表示所有日志级别
-*.* —— 所有服务的所有级别的日志
+
+
 日志轮转：日志的轮替、日志的轮转
 为什么要轮转？
 1）防止日志文件过大
-2）定期清除日志        
-日志轮转的配置文件
+2）定期清除日志 
 
+日志轮转的配置文件
 # vim /etc/logrotate.conf
 weekly                          //轮转的周期，一周一轮转
 rotate 4                         //保留几个旧的日志文件，类似于备份
-create                            //旧日志轮转后是否创建新的空白日志
+create                            //当转储后文件不存在时创建
 dateext                           //使用日期作为旧日志的后缀
 include /etc/logrotate.d     //包含该路径下的所有配置文件
 /var/log/wtmp {               //针对特定的日志进行定制设置
@@ -107,8 +54,26 @@ minsize 1M                  //轮滚的最小大小是1M
 rotate 1                      
 }
 /var/log/btmp {
-missingok               //丢了也没关系
+missingok               //如果日志文件丢失，不要显示错误
 monthly
-create 0600 root utmp
+create 0600 root utmpnibu
 rotate 1
 }
+
+# cat /etc/logrotate.d/nginx
+/var/log/nginx/*log {
+    create 0664 nginx root
+    daily
+    rotate 3
+    size 1    //（>= 5 个字节就转储）
+    missingok
+    notifempty   //当日志文件为空时，不进行轮转
+    compress     //通过gzip 压缩转储以后的日志
+    sharedscripts   //运行postrotate脚本
+    postrotate    //在logrotate转储之后需要执行的指令，必须独立成行
+        /bin/kill -USR1 `cat /run/nginx.pid 2>/dev/null` 2>/dev/null || true
+    endscript   //结束指令
+}
+
+
+https://www.linuxidc.com/Linux/2019-02/157099.htm
