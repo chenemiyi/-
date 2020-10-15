@@ -1,0 +1,33 @@
+windows: winrar,360压缩,好压,zip
+linux: zip, .gz , .bz2
+
+安装zip、gzip、bzip2软件包：
+# yum install zip unzip gzip bzip2 -y
+
+# zip  /tmp/a.zip  /etc/passwd  /etc/group  //压缩两个文件
+# zip -r /tmp/b.zip  /etc     //压缩/etc目录
+# unzip /tmp/a.zip   //解压
+
+gzip bzip2 压缩后原文件会消失, 解压后压缩包会消失
+gzip格式的压缩包命名一般为*.tar.gz
+bzip2格式的压缩包命名一般为*.tar.bz2
+
+# gzip -r /dir/   //后缀为.gz文件
+# ll /dir/
+-rw-r--r--. 1 root root 294 7月  25 16:19 group.gz
+-rw-r--r--. 1 root root 407 7月  25 16:19 passwd.gz
+# gunzip -r /dir/  
+     
+tar 打包与压缩
+-c 创建归档
+-r 将文件追加到归档的结尾 , 只适用于打包
+-t 列出归档内容
+-x 解包
+-f 接文件名
+-a 自动根据指定的文件名后缀进行压缩
+-j 通过 bzip2 过滤归档
+-z 通过 gzip 过滤归档
+-C 解包至哪个目录
+-v 详细地列出处理的文件
+
+# tar czf /unpack/test.tar.gz /test/     //压缩成gzip格式
