@@ -2,12 +2,14 @@
 
 
 安装python3
-wget https://www.python.org/ftp/python/
-tar - zxvf Python-.....
-cd Python-3.9.0/
+https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tar.xz
 mkdir /usr/local/python3 
+tar xf Python-3.9.1.tar.xz -C /usr/local/python3
+cd Python-3.9.1/
+
 
 ssl模块不能编译问题
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/
 cd libressl-2.7.4
 ./configure --prefix=/usr/local
 sudo make install
