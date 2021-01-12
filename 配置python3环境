@@ -1,4 +1,10 @@
-1.检测Python版本
+检测Python版本
+
+[root@izbp1i4dkyavklohj96seaz ~]# python
+Python 2.7.5 (default, Nov  6 2016, 00:28:07)
+[GCC 4.8.5 20150623 (Red Hat 4.8.5-11)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>>
 
 
 安装python3
@@ -40,6 +46,9 @@ sudo yum install compat-openssl10-devel --allowerasing
 make
 make install
 
-ln -s /usr/local/python3/bin/python3  /usr/bin/python3
+(ln -s /usr/local/python3/bin/python3  /usr/bin/python3) 可选
 # python3 -V  验证结果
+
+[root@izbp1i4dkyavklohj96seaz bin]# python3 -V
+Python 3.9.1
 
