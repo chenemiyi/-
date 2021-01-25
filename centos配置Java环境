@@ -1,0 +1,34 @@
+yum list installed |grep java
+
+yum -y install java-1.8.0-openjdk*
+
+which java
+
+ls -lrt /usr/bin/java
+
+
+
+[root@izbp1i4dkyavklohj96seaz bao]# which java
+/usr/bin/java
+[root@izbp1i4dkyavklohj96seaz bao]# ls -lrt /usr/bin/java
+lrwxrwxrwx 1 root root 22 Jan 25 17:26 /usr/bin/java -> /etc/alternatives/java
+[root@izbp1i4dkyavklohj96seaz bao]# ll /etc/alternatives/java
+lrwxrwxrwx 1 root root 73 Jan 25 17:26 /etc/alternatives/java -> /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.275.b01-0.el7_9.x86_64/jre/bin/java
+[root@izbp1i4dkyavklohj96seaz bao]# ll /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.275.b01-0.el7_9.x86_64/jre/bin/java
+-rwxr-xr-x 1 root root 9024 Dec 17 01:32 /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.275.b01-0.el7_9.x86_64/jre/bin/java
+
+
+
+# vim /etc/profile
+
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0
+export JRE_HOME=$JAVA_HOME/jre  
+export PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib
+
+# source /etc/profile
+
+[root@izbp1i4dkyavklohj96seaz bao]# java -version
+openjdk version "1.8.0_275"
+OpenJDK Runtime Environment (build 1.8.0_275-b01)
+OpenJDK 64-Bit Server VM (build 25.275-b01, mixed mode)
